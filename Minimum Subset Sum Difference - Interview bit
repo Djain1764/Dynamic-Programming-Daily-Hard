@@ -1,0 +1,49 @@
+public class Solution {
+    public int solve(int[] A) {
+        
+        int range = 0 ;
+        for ( int i = 0 ; i < A.length ; i++ ){
+            range += A[i] ;
+        }
+        
+        int m = A.length + 1 ;
+        int n = range + 1 ;
+        
+        boolean dp[][] = new boolean[m][n] ;
+
+        for (int i = 0 ; i < m ; i++ )
+            dp[i][0] = true ;
+            
+        for ( int i = 1 ; i < m ; i++ ){
+            for ( int j = 1 ; j < n ; j++ ){
+                if ( j < A[i - 1] ){
+                    dp[i][j] = dp[i - 1][j] ;
+                }else if ( j == A[i - 1]){
+                    dp[i][j] = true ;
+                }else{
+                    dp[i][j] = dp[i - 1][j] || dp[i - 1][j - A[i - 1]] ;
+                }
+            }
+        }
+        
+        int []arr = new int[( range + 1 ) / 2 + 1] ;
+        int k = 0 ;
+        for (int i = 0 ; i < arr.length ; i++ ){
+            if (dp[m - 1][i]){
+                arr[k++] = i ;
+            }
+        }
+        
+        int min = Integer.MAX_VALUE ;
+        for ( int i = 0 ; i < arr.length ; i++ ){
+            if (range - 2*arr[i] >= 0){
+                if ( min > ( range - 2*arr[i] ) ){
+                    min = range - 2*arr[i] ;
+                }
+            }
+        }
+        
+        return min ;
+        
+    }
+}
