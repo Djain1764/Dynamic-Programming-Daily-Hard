@@ -1,0 +1,43 @@
+public class Solution {
+    public int solve(int[] A, int B) {
+        
+        // here we will find the sum of array
+        int range = 0 ;
+        for( int i = 0 ; i < A.length ; i++ ){
+            range += A[i] ;
+        }
+        
+        // B is the difference according to which we have to find the diff of s1 - s2
+        
+        int k = ( range + B ) / 2 ;
+        
+        // Actually , we don't have to count the whole, we will reduce the problem to count of subset sum, k is result of formula after which we have to just find the number of subset sum where sum = k
+        // s1 - s2 = diff , s1 + s2 = range , adding these two will result in s1 = ( range + diff ) / 2, so actaully we have to find no of subset sum = s1 here. As simple as that
+        // and that count will be our answer
+        
+        int m = A.length + 1 ;
+        int n = k + 1 ;
+        
+        // creating a two - d array and initializing its first column with 1 as every set have atleast 1 empty set which sums to 0 
+        
+        int dp[][] = new int[m][n] ;
+        
+        for ( int i = 0 ; i < m ; i++ )
+            dp[i][0] = 1 ;
+        
+        // refer pepcoding video to understand subset sum problem
+        
+        for ( int i = 1 ; i < m ; i++ ){
+            for ( int j = 1 ; j < n ; j++ ){
+                if ( A[i - 1] > j ){
+                    dp[i][j] = dp[i - 1][j] ;
+                }else{
+                    dp[i][j] = dp[i - 1][j] + dp[i - 1][j - A[i - 1]] ;  
+                }
+            }
+        }
+        
+        return dp[m - 1][n - 1] ;
+        
+    }
+}
